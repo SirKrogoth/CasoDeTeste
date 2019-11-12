@@ -1,4 +1,5 @@
-﻿using ExpectedObjects;
+﻿using CursoOnline.Domain.Test._util;
+using ExpectedObjects;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -41,11 +42,8 @@ namespace CursoOnline.Domain.Test.Curso
                 Valor = (double)950
             };
 
-            var mensage = Assert.Throws<ArgumentException>(() =>
-                new Curso(nomeInvalido, cursoEsperado.CargaHoraria, cursoEsperado.PublicoAlvo, cursoEsperado.Valor))
-                .Message;
-
-            Assert.Equal("Nome Inválido!", mensage);
+            Assert.Throws<ArgumentException>(() =>
+                new Curso(nomeInvalido, cursoEsperado.CargaHoraria, cursoEsperado.PublicoAlvo, cursoEsperado.Valor)).ComMensagem("Nome Inválido");
         }
 
         [Theory]
@@ -108,7 +106,7 @@ namespace CursoOnline.Domain.Test.Curso
         public Curso(string nome, double cargaHoraria, PublicoAlvo publicoAlvo, double valor)
         {
             if (string.IsNullOrEmpty(nome))
-                throw new ArgumentException("Nome Inválido!");
+                throw new ArgumentException("Nome Inválido");
 
             if(cargaHoraria < 1)
                 throw new ArgumentException("Carga Horária inválida");
