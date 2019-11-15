@@ -12,6 +12,7 @@ namespace CursoOnline.Domain.Test.Curso
     {
         public ITestOutputHelper _outputHelper;
         private string _nome;
+        private string _descricao;
         private double _cargaHoraria;
         private PublicoAlvo _publicoAlvo;
         private double _valor;
@@ -26,6 +27,7 @@ namespace CursoOnline.Domain.Test.Curso
         public CursoTeste()
         {
             _nome = "João";
+            _descricao = "descricao do joao";
             _cargaHoraria = 80;
             _publicoAlvo = PublicoAlvo.Empregado;
             _valor = 950;
@@ -37,12 +39,14 @@ namespace CursoOnline.Domain.Test.Curso
             var cursoEsperado = new
             {
                 Nome = _nome,
+                Descricao = _descricao,
                 CargaHoraria = _cargaHoraria,
                 PublicoAlvo = _publicoAlvo,
                 Valor = _valor
             };
 
             var curso = new Curso(cursoEsperado.Nome,
+                                  cursoEsperado.Descricao,
                                   cursoEsperado.CargaHoraria,
                                   cursoEsperado.PublicoAlvo,
                                   cursoEsperado.Valor);
@@ -57,7 +61,8 @@ namespace CursoOnline.Domain.Test.Curso
         public void NaoDeveCursoTerUmNomeInvalido(string nomeInvalido)
         {
             Assert.Throws<ArgumentException>(() =>
-                new Curso(nomeInvalido, _cargaHoraria, _publicoAlvo, _valor)).ComMensagem("Nome Inválido");
+                CursoBuilder.Novo().ComNome(nomeInvalido).Build())
+                .ComMensagem("Nome inválido");
         }
 
         [Theory]
@@ -66,11 +71,9 @@ namespace CursoOnline.Domain.Test.Curso
         [InlineData(-100)]
         public void CursoNaoDeveTerCargaHorariaMenorQue(double cargaInvalido)
         {
-            var mensage = Assert.Throws<ArgumentException>(() =>
-                new Curso(_nome, cargaInvalido, _publicoAlvo, _valor))
-                .Message;
-
-            Assert.Equal("Carga Horária inválida", mensage); ;
+            Assert.Throws<ArgumentException>(() =>
+                CursoBuilder.Novo().ComCargaHoraria(cargaInvalido).Build())
+                .ComMensagem("Carga Horária inválida");
         }
 
         [Theory]
@@ -80,7 +83,8 @@ namespace CursoOnline.Domain.Test.Curso
         public void CursoNaoDeveTerValorMenorQue1(double valorInvalido)
         {
             Assert.Throws<ArgumentException>(() =>
-                new Curso(_nome, _cargaHoraria, _publicoAlvo, valorInvalido));
+                CursoBuilder.Novo().ComValor(valorInvalido).Build())
+                .ComMensagem("Valor inválido");
         }
     }
 
@@ -98,8 +102,9 @@ namespace CursoOnline.Domain.Test.Curso
         public double CargaHoraria { get; private set; }
         public PublicoAlvo PublicoAlvo { get; private set; }
         public double Valor { get; private set; }
+        public string Descricao { get; private set; }
 
-        public Curso(string nome, double cargaHoraria, PublicoAlvo publicoAlvo, double valor)
+        public Curso(string nome, string descricao, double cargaHoraria, PublicoAlvo publicoAlvo, double valor)
         {
             if (string.IsNullOrEmpty(nome))
                 throw new ArgumentException("Nome Inválido");
@@ -114,6 +119,7 @@ namespace CursoOnline.Domain.Test.Curso
             this.CargaHoraria = cargaHoraria;
             this.PublicoAlvo = publicoAlvo;
             this.Valor = valor;
+            this.Descricao = descricao;
         }
     }
 }
