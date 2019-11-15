@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using CursoOnline.Domain.Test;
+using CursoOnline.Domain;
 
 namespace CursoOnline.Domain.Test.Curso
 {
@@ -49,9 +50,9 @@ namespace CursoOnline.Domain.Test.Curso
             return this;
         }
 
-        public Curso Build()
+        public Domain.Curso Build()
         {
-            return new Curso(_nome, _descricao, _cargaHoraria, _publicoAlvo, _valor);
+            return new Domain.Curso(_nome, _descricao, _cargaHoraria, _publicoAlvo, _valor);
         }
     }
 }
